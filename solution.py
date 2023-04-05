@@ -7,11 +7,13 @@ from scipy.stats import norm
 chat_id = 123456 # Ваш chat ID, не меняйте название переменной
 
 def solution(p: float, x: np.array) -> tuple:
-    # Измените код этой функции
-    # Это будет вашим решением
-    # Не меняйте название функции и её аргументы
-    alpha = 1 - p
-    loc = x.mean()
-    scale = np.sqrt(np.var(x)) / np.sqrt(len(x))
-    return loc - scale * norm.ppf(1 - alpha / 2), \
-           loc - scale * norm.ppf(alpha / 2)
+    n = len(x)
+    sample_mean = np.mean(x)
+    sample_std = np.std(x, ddof=1)  # используем несмещенную оценку стандартного отклонения
+
+    t_critical = abs(np.round(stats.t.ppf((1 - p) / 2, n - 1), 4))  # критическое значение t-статистики
+
+    left_boundary = round(sample_mean - (t_critical * sample_std / np.sqrt(n)), 4)
+    right_boundary = round(sample_mean + (t_critical * sample_std / np.sqrt(n)), 4)
+
+    return (left_boundary, right_boundary)
