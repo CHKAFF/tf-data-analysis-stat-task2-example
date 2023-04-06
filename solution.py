@@ -8,13 +8,9 @@ chat_id = 303247798 # Ваш chat ID, не меняйте название пе�
 
 def solution(p: float, x: np.array) -> tuple:
     n = len(x)
-    sample_mean = np.mean(x)
-    
-    sample_std = np.std(x, ddof=1)
-
-    t_critical = abs(np.round(norm.ppf((1 - p) / 2, n - 1), 4))
-
-    left_boundary = round(sample_mean - (t_critical * sample_std / np.sqrt(n)), 4)
-    right_boundary = round(sample_mean + (t_critical * sample_std / np.sqrt(n)), 4)
-
-    return left_boundary, right_boundary
+    critical_value = np.sqrt(np.log(1/(1-p))/2)
+    mean = np.mean(x)
+    std_dev = np.std(x, ddof=1)
+    left_boundary = mean - critical_value*std_dev/np.sqrt(n)
+    right_boundary = mean + critical_value*std_dev/np.sqrt(n)
+    return (left_boundary, right_boundary)
